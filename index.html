@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --ink: #0f0e0c;
+    --cream: #f7f4ee;
+    --accent: #c8403a;
+    --gold: #d4a843;
+    --muted: #7a7570;
+    --card-bg: #ffffff;
+    --border: #e0dbd2;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* Nav */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 3rem;
+    z-index: 100;
+    mix-blend-mode: multiply;
+  }
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    opacity: 0.7;
+  }
+  .nav-links { display: flex; gap: 2.5rem; }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+  .nav-links a:hover { opacity: 1; }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 3rem 4rem 3rem;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 6vw, 6rem);
+    font-weight: 900;
+    line-height: 1.0;
+    color: var(--ink);
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+  .hero-name .italic { font-style: italic; color: var(--accent); }
+  .hero-subtitle {
+    font-size: 1rem;
+    color: var(--muted);
+    margin-top: 1.5rem;
+    line-height: 1.7;
+    max-width: 380px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+  .hero-cta {
+    margin-top: 2.5rem;
+    display: flex; gap: 1rem; align-items: center;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--cream);
+    border: none;
+    padding: 0.85rem 2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: background 0.2s, transform 0.15s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--accent); transform: translateY(-2px); }
+  .btn-ghost {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+    
+  }
+  .btn-ghost:hover { color: var(--ink); border-color: var(--ink); }
+
+  .hero-right {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .hero-bg-shape {
+    position: absolute;
+    width: 420px; height: 520px;
+    background: var(--ink);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-3deg);
+    opacity: 0;
+    animation: fadeIn 1s 0.3s forwards;
+  }
+  .hero-photo-placeholder {
+    position: relative;
+    z-index: 2;
+    width: 300px; height: 380px;
+    background: linear-gradient(135deg, #d0cdc5 0%, #b8b4ac 100%);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 0.75rem;
+    transform: rotate(2deg);
+    opacity: 0;
+    animation: fadeIn 1s 0.6s forwards;
+    border: 6px solid var(--cream);
+  }
+  .hero-photo-placeholder svg { opacity: 0.3; }
+  .hero-photo-placeholder p {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    opacity: 0.5;
+  }
+  .hero-badge {
+    position: absolute;
+    bottom: 15%; right: 8%;
+    background: var(--gold);
+    color: var(--ink);
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1.4;
+    font-weight: 500;
+    z-index: 3;
+    animation: spin 20s linear infinite;
+    opacity: 0;
+    animation: fadeIn 1s 1s forwards, spin 20s 1s linear infinite;
+    transform-origin: center;
+  }
+
+  /* Ticker */
+  .ticker {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 0.75rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ticker-inner {
+    display: inline-flex; gap: 4rem;
+    animation: marquee 18s linear infinite;
+  }
+  .ticker-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+  .ticker-dot { color: var(--gold); margin-right: -2rem; }
+
+  /* About */
+  section { padding: 7rem 3rem; }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 3rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    max-width: 80px;
+  }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .about-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+  }
+  .about-headline em { font-style: italic; color: var(--accent); }
+  .about-body {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+  .stats-row { display: flex; gap: 3rem; margin-top: 2.5rem; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .stat-num span { color: var(--accent); }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.25rem;
+  }
+  .skills-stack { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .skill-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    transition: all 0.2s;
+    
+  }
+  .skill-tag:hover { border-color: var(--ink); color: var(--ink); background: var(--ink); color: var(--cream); }
+
+  /* Work */
+  .work-section { background: var(--ink); color: var(--cream); }
+  .work-section .section-label { color: var(--gold); }
+  .work-section .section-label::after { background: rgba(255,255,255,0.1); }
+  .work-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5px; margin-top: 3rem; background: rgba(255,255,255,0.08); }
+  .work-card {
+    background: var(--ink);
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+    
+  }
+  .work-card:hover { background: #1a1916; }
+  .work-card::before {
+    content: attr(data-num);
+    position: absolute;
+    top: 1.5rem; right: 2rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    font-weight: 900;
+    color: rgba(255,255,255,0.04);
+    line-height: 1;
+  }
+  .work-card-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-bottom: 1rem;
+  }
+  .work-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--cream);
+  }
+  .work-card-desc {
+    font-size: 0.875rem;
+    color: rgba(247,244,238,0.5);
+    line-height: 1.7;
+    max-width: 320px;
+  }
+  .work-card-link {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    margin-top: 1.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cream);
+    text-decoration: none;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    
+  }
+  .work-card-link:hover { opacity: 1; }
+  .work-card-link svg { transition: transform 0.2s; }
+  .work-card-link:hover svg { transform: translate(3px, -3px); }
+
+  /* Contact */
+  .contact-section {
+    text-align: center;
+    padding: 8rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .contact-section::before {
+    content: 'HELLO';
+    position: absolute;
+    font-family: 'Playfair Display', serif;
+    font-size: 22vw;
+    font-weight: 900;
+    color: rgba(0,0,0,0.04);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .contact-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  .contact-headline em { font-style: italic; color: var(--accent); }
+  .contact-sub {
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin-bottom: 2.5rem;
+    position: relative;
+  }
+  .contact-email {
+    display: inline-block;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-style: italic;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 4px;
+    transition: color 0.2s;
+    position: relative;
+    
+  }
+  .contact-email:hover { color: var(--accent); }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 3rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .footer-copy {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .footer-socials { display: flex; gap: 1.5rem; }
+  .footer-socials a {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+    
+  }
+  .footer-socials a:hover { color: var(--ink); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 1.25rem 1.5rem; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .hero-left { padding: 7rem 1.5rem 4rem; }
+    section { padding: 5rem 1.5rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .work-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+
+<nav>
+  <div class="nav-logo">dilipan.dev</div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#work">Work</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="home">
+  <div class="hero-left">
+    <p class="hero-tag">&#x2022; Available for hire · 2025</p>
+    <h1 class="hero-name">
+      Creative<br>
+      <span class="italic">Designer</span><br>
+      &amp; Developer
+    </h1>
+    <p class="hero-subtitle">
+      I craft bold digital experiences where design and code collide. From concept to pixel-perfect execution — let's make something unforgettable.
+    </p>
+    <div class="hero-cta">
+      <a href="#work" class="btn-primary">View My Work</a>
+      <a href="#contact" class="btn-ghost">Let's Talk</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-bg-shape"></div>
+    <div class="hero-photo-placeholder">
+      <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+        <circle cx="26" cy="18" r="10" stroke="#0f0e0c" stroke-width="2"/>
+        <path d="M6 46c0-11 9-18 20-18s20 7 20 18" stroke="#0f0e0c" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <p>Your Photo Here</p>
+    </div>
+    <div class="hero-badge" style="animation: spin 20s linear infinite;">
+      ✦ Open To Work ✦ Hire Me
+    </div>
+  </div>
+</section>
+
+<!-- Ticker -->
+<div class="ticker">
+  <div class="ticker-inner" id="ticker-inner">
+    <span class="ticker-item">UI Design <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Web Development <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Branding <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Motion Design <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Creative Direction <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">UI Design <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Web Development <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Branding <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Motion Design <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Creative Direction <span class="ticker-dot">✦</span></span>
+  </div>
+</div>
+
+<!-- About -->
+<section id="about">
+  <p class="section-label">About me</p>
+  <div class="about-grid">
+    <div>
+      <h2 class="about-headline">
+        I turn ideas into<br><em>visual stories</em><br>that resonate.
+      </h2>
+      <p class="about-body">
+        Based in krishnagiri, I'm a multidisciplinary designer and developer srinisa with a passion for building things that are both beautiful and functional. I believe great design is felt, not just seen.
+      </p>
+      <p class="about-body">
+        With over [X] years of experience working with startups, agencies, and global brands, I bring a strategic eye and a hands-on approach to every project.
+      </p>
+      <div class="stats-row">
+        <div>
+          <div class="stat-num">42<span>+</span></div>
+          <div class="stat-label">Projects Done</div>
+        </div>
+        <div>
+          <div class="stat-num">18<span>+</span></div>
+          <div class="stat-label">Happy Clients</div>
+        </div>
+        <div>
+          <div class="stat-num">5<span>yr</span></div>
+          <div class="stat-label">Experience</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="section-label" style="margin-bottom: 1.5rem;">Skills &amp; Tools</div>
+      <div class="skills-stack">
+        <span class="skill-tag">Figma</span>
+        <span class="skill-tag">React</span>
+        <span class="skill-tag">Next.js</span>
+        <span class="skill-tag">TypeScript</span>
+        <span class="skill-tag">Framer</span>
+        <span class="skill-tag">After Effects</span>
+        <span class="skill-tag">Tailwind CSS</span>
+        <span class="skill-tag">Node.js</span>
+        <span class="skill-tag">Webflow</span>
+        <span class="skill-tag">Three.js</span>
+        <span class="skill-tag">Illustrator</span>
+        <span class="skill-tag">GSAP</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Work -->
+<section class="work-section" id="work">
+  <p class="section-label">Selected Work</p>
+  <div class="work-grid">
+    <div class="work-card" data-num="01">
+      <div class="work-card-tag">Brand Identity · 2024</div>
+      <h3 class="work-card-title">Velour Studio</h3>
+      <p class="work-card-desc">Complete brand overhaul for a luxury fashion label — identity system, typography, and digital touchpoints.</p>
+      <a href="#" class="work-card-link">
+        View Project
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </a>
+    </div>
+    <div class="work-card" data-num="02">
+      <div class="work-card-tag">Web App · 2024</div>
+      <h3 class="work-card-title">Meridian Dashboard</h3>
+      <p class="work-card-desc">A real-time analytics platform built with React and D3 — designed for speed, clarity, and scale.</p>
+      <a href="#" class="work-card-link">
+        View Project
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </a>
+    </div>
+    <div class="work-card" data-num="03">
+      <div class="work-card-tag">Mobile · 2023</div>
+      <h3 class="work-card-title">Bloom Wellness App</h3>
+      <p class="work-card-desc">UX strategy and UI design for a mental wellness mobile app — 50k+ downloads in the first month.</p>
+      <a href="#" class="work-card-link">
+        View Project
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </a>
+    </div>
+    <div class="work-card" data-num="04">
+      <div class="work-card-tag">Creative Direction · 2023</div>
+      <h3 class="work-card-title">Orbit Campaign</h3>
+      <p class="work-card-desc">Digital campaign for a tech startup launch — motion design, landing page, and social content system.</p>
+      <a href="#" class="work-card-link">
+        View Project
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5M12 2v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section class="contact-section" id="contact">
+  <p class="section-label" style="justify-content: center; margin-bottom: 2rem;">Get In Touch</p>
+  <h2 class="contact-headline">
+    Got a project<br>in <em>mind?</em>
+  </h2>
+  <p class="contact-sub">I'm always open to discussing new opportunities and creative ideas.</p>
+  <a href="mailto:dilipan0204@gmail.com" class="contact-email">dilipan0204@gmail.com</a>
+</section>
+
+<footer>
+  <div class="footer-copy">&#169; 2025 YourName — All Rights Reserved</div>
+  <div class="footer-socials">
+    <a href="#">Twitter</a>
+    <a href="#">LinkedIn</a>
+    <a href="#">Dribbble</a>
+    <a href="#">GitHub</a>
+  </div>
+</footer>
+
+<script>
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.work-card, .stat-num, .skill-tag').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
